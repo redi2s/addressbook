@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block submenu %}
+    <li><a href="{% url 'main' %}">Главная</a></li>
+    <li><a href="{% url 'add' %}">Добавить запись</a></li>
+    <li><a href="{% url 'edit' record.id %}">Редактировать запись</a></li>
+    <li><a href="{% url 'remove' record.id %}" onclick="return confirm('Удалить {{ record.fullname }}?')">Удалить запись</a></li>
+    <li><a href="{% url 'export' %}">Скачать книгу</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h4>Просмотр записи</h4>
+    </div>
+
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><strong>{{ record.fullname }}</strong></div>
+
+        <table class="table">
+            {#<tbody>#}
+                <tr>
+                    <td class="col-xs-4">Дата рождения</td>
+                    <td class="col-xs-10">{{ record.birthdate }}</td>
+                </tr>
+                <tr>
+                    <td class="col-xs-4">Адрес</td>
+                    <td class="col-xs-10">{{ record.address }}</td>
+                </tr>
+                <tr>
+                    <td class="col-xs-4">Телефон</td>
+                    <td class="col-xs-10">{{ record.phone }}</td>
+                </tr>
+                <tr>
+                    <td class="col-xs-4">Эл. почта</td>
+                    <td class="col-xs-10">{{ record.email }}</td>
+                </tr>
+                <tr>
+                    <td class="col-xs-4">Комментарий</td>
+                    <td class="col-xs-10">{{ record.comment }}</td>
+                </tr>
+            {#</tbody>#}
+        </table>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if records %}
+        <form action="{% url 'search' %}" method="get">
+            <div class="form-group">
+                <div class="input-group input-group-search">
+                    <span class="input-group-addon">Поиск</span>
+                    <input type="text" class="form-control" placeholder="Поиск по ФИО" name="q">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-condensed table-striped">
+            <tr>
+                <th><strong>ФИО</strong></th>
+                <th><strong>Дата рождения</strong></th>
+                <th><strong>Адрес</strong></th>
+                <th><strong>Телефон</strong></th>
+                <th><strong>Электронная почта</strong></th>
+                <th><strong>Комментарий</strong></th>
+                <th class="text-center"></th>
+                <th class="text-center"></th>
+            </tr>
+            {% for record in records %}
+                <tr>
+                    <td><a href="{% url 'review' record.id %}">{{ record.fullname }}</a></td>
+                    {#<td>{{ record.fullname }}</td>#}
+                    <td>{{ record.birthdate }}</td>
+                    <td>{{ record.address }}</td>
+                    <td>{{ record.phone }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.comment }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'edit' record.id %}" class="glyphicon glyphicon-edit" aria-hidden="true"></a>
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url 'remove' record.id %}" class="glyphicon glyphicon-trash" aria-hidden="true" onclick="return confirm('Удалить {{ record.fullname }}?')"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="well">В вашей телефонной книге пока нет записей. <a href="{% url 'add' %}">Добавить запись?</a></div>
+    {% endif %}
+
+    {% comment %}{% if records.num_pages > 1 %}
+        <div class="product-pagination">
+            <nav>
+                <ul class="pagination">
+                    {% if records.has_previous %}
+                        <li>
+                            <a href="/catalog/page/{{ records.previous_page_number }}/" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                    {% endif %}
+
+                    {% for page in records.paginator.page_range %}
+                        {% if page == records.number %}
+                            <li class="active"><a href="/catalog/page/{{ page }}/">{{ page }}<span class="sr-only">(current)</span></a></li>
+                        {% else %}
+                            <li><a href="/catalog/page/{{ page }}/">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if records.has_next %}
+                        <li>
+                            <a href="/catalog/page/{{ records.next_page_number }}/" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled"><a href="" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}{% endcomment %}
+{% endblock %}

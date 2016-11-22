@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block menu %}{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-offset-4 col-md-5">
+        <div class="page-header">
+            <h3>Пожалуйста, войдите</h3>
+        </div>
+    </div>
+
+    {% if form.errors and not form.non_field_errors %}
+        {% if form.errors.items|length == 1 %}
+            <div class="col-md-offset-4 col-md-5">
+                <div class="alert alert-danger" role="alert">Пожалуйста, исправьте ошибку ниже.</div>
+            </div>
+        {% else %}
+            <div class="col-md-offset-4 col-md-5">
+                <div class="alert alert-danger" role="alert">Пожалуйста, исправьте ошибки ниже.</div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if form.errors and form.non_field_errors %}
+        <div class="col-md-offset-4 col-md-5">
+        <div class="alert alert-danger">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+        </div>
+        </div>
+    {% endif %}
+
+    {#<form class="form-horizontal" role="form" action="" method="post">#}
+    <form action="{% url 'login' %}" class="form-horizontal" role="form" method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="username" class="col-md-4 control-label">{{ form.username.label }}</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="username" id="username" placeholder="Введите имя пользователя" {% if form.username.value %}value="{{ form.username.value }}"{% endif %}>
+            </div>
+            {% if form.username.errors %}
+                <div class="col-md-offset-4 col-md-5">
+                    <div class="alert alert-danger" role="alert">
+                        <p>{% for error in form.username.errors %}{{ error }}{% endfor %}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="col-md-4 control-label">{{ form.password.label }}</label>
+            <div class="col-md-5">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Введите пароль">
+            </div>
+            {% if form.password.errors %}
+                <div class="col-md-offset-4 col-md-5">
+                    <div class="alert alert-danger" role="alert">
+                        <p>{% for error in form.password.errors %}{{ error }}{% endfor %}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                <button type="submit" class="btn btn-default">Войти</button>
+                <button type="button" class="btn btn-link"><a href="#">Забыли пароль?</a></button>
+                <button type="button" class="btn btn-link"><a href="{% url 'register' %}">Регистрация</a></button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block jquery %}
+    <script type="text/javascript">
+        document.getElementById('username').focus()
+    </script>
+{% endblock %}

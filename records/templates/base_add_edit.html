@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block extrahead %}
+    <link href="{% static "jquery-ui-1.12.1/jquery-ui.css" %}" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    {% block contenttitle %}{% endblock %}
+
+    {% if form.errors and not form.non_field_errors %}
+        {% if form.errors.items|length == 1 %}
+            <div class="alert alert-danger" role="alert">Пожалуйста, исправьте ошибку ниже.</div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">Пожалуйста, исправьте ошибки ниже.</div>
+        {% endif %}
+    {% endif %}
+
+    {% if form.errors and form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% block subcontent %}
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="col-md-2 control-label text-left">
+                        {{ field.label }}
+                        {% if field.field.required %}<span>*</span>{% endif %}
+                    </label>
+                    <div class="col-md-5">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                        <div class="col-md-offset-2 col-md-5">
+                            <div class="alert alert-danger" role="alert">
+                                <p>{% for error in field.errors %}{{ error }}{% endfor %}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-5">
+                    <button type="submit" class="btn btn-default">Записать</button>
+                </div>
+            </div>
+        </form>
+    {% endblock %}
+{% endblock %}
+
+{% block jquery %}
+    <script type="text/javascript" src="{% static "jquery-ui-1.12.1/jquery-ui.js" %}"></script>
+
+    <script>
+        $(function() {
+            $( ".datepicker" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+{#                minDate: "-20Y",#}
+{#                maxDate: "+0Y",#}
+                dateFormat: "dd.mm.yy",
+            });
+        });
+    </script>
+{% endblock %}

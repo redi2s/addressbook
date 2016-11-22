@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h4>{{ title }}</h4>
+    </div>
+
+    {% if records %}
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>Вы искали: <strong>{{ query }}</strong></p>
+                <p>Найдено позиций: <strong>{{ records|length }}</strong></p>
+            </div>
+        </div>
+
+        <table class="table table-condensed table-striped">
+            <tr>
+                <th><strong>ФИО</strong></th>
+                <th><strong>Дата рождения</strong></th>
+                <th><strong>Адрес</strong></th>
+                <th><strong>Телефон</strong></th>
+                <th><strong>Электронная почта</strong></th>
+                <th><strong>Комментарий</strong></th>
+                <th class="text-center"></th>
+                <th class="text-center"></th>
+            </tr>
+
+            {% for record in records %}
+                <tr>
+                    <td>{% if record.fullname == NULL %}{% else %}<a href="{% url 'review' record.id %}">{{ record.fullname }}{% endif %}</a></td>
+                    {#<td>{{ record.fullname }}</td>#}
+                    <td>{% if record.birthdate == NULL %}{% else %}{{ record.birthdate }}{% endif %}</td>
+                    <td>{% if record.address == NULL %}{% else %}{{ record.address }}{% endif %}</td>
+                    <td>{% if record.phone == NULL %}{% else %}{{ record.phone }}{% endif %}</td>
+                    <td>{% if record.email == NULL %}{% else %}{{ record.email }}{% endif %}</td>
+                    <td>{% if record.comment == NULL %}{% else %}{{ record.comment }}{% endif %}</td>
+                    <td class="text-center">
+                        <a href="{% url 'edit' record.id %}" class="glyphicon glyphicon-edit" aria-hidden="true"></a>
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url 'remove' record.id %}" class="glyphicon glyphicon-trash" aria-hidden="true" onclick="return confirm('Удалить {{ record.fullname }}?')"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="well">По Вашему запросу ничего не найдено.</div>
+    {% endif %}
+
+{% endblock %}
+

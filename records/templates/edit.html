@@ -1,0 +1,13 @@
+{% extends 'base_add_edit.html' %}
+
+{% block submenu %}
+    <li><a href="{% url 'main' %}">Главная</a></li>
+    <li><a href="{% url 'add' %}">Добавить запись</a></li>
+    <li><a href="{% url 'export' %}">Скачать книгу</a></li>
+{% endblock %}
+
+{% block contenttitle %}
+    <div class="page-header">
+        <h4>Редактирование записи</h4>
+    </div>
+{% endblock %}
